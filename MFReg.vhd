@@ -257,6 +257,7 @@ architecture RG_arch of RG is
 begin
     process (CLR, EN, CLK)
         variable Y: BIT_VECTOR (2 downto 0);
+        variable Q: BIT_VECTOR (3 downto 0);
     begin
         if CLR='1' then
             Q0 <= '0';
@@ -294,10 +295,18 @@ begin
                 Q2 <= Q2 and D2;
                 Q3 <= Q3 and D3;
             elsif Y = "100" then
-                Q0 <= not Q0;
-                Q1 <= not Q1;
-                Q2 <= not Q2;
-                Q3 <= not Q3;
+                Q := Q0 & Q1 & Q2 & Q3;
+                if Q = "0000" then
+                    Q0 <= '0';
+                    Q1 <= '0';
+                    Q2 <= '0';
+                    Q3 <= '0';
+                else
+                    Q0 <= not Q0;
+                    Q1 <= not Q1;
+                    Q2 <= not Q2;
+                    Q3 <= not Q3;
+                end if;
             elsif Y = "101" then
                 Q0 <= Q0 or D0;
                 Q1 <= Q1 or D1;
